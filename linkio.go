@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package linkio provides an io.Reader that returns data,
-// simulating a network connection of a certain speed.
+// Package linkio provides an io.Reader and io.Writer that
+// simulate a network connection of a certain speed.
 package linkio
 
 import (
