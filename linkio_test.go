@@ -15,7 +15,7 @@ func TestOne(t *testing.T) {
 	var y [1000]byte
 	buf := bytes.NewBuffer(y[:])
 
-	lr := NewLink(30 /* kbps */).NewLinkReader(buf)
+	lr := NewLink(Throughput(30) * KilobitPerSecond /* kbps */).NewLinkReader(buf)
 	for {
 		var x [1024]byte
 		n, err := lr.Read(x[:])

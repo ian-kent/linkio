@@ -2,13 +2,39 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// This package provides an io.Reader that returns data,
+// Package linkio provides an io.Reader that returns data,
 // simulating a network connection of a certain speed.
 package linkio
 
 import (
 	"io"
 	"time"
+)
+
+// Throughput represents the link speed as an int64 bits per second
+// count. The representation limits the largest representable throughput
+// to approximately 9223 petabits per second.
+type Throughput int64
+
+// Common throughputs.
+//
+// To count the number of units in a Duration, divide:
+//	kilobit := linkio.KilobitPerSecond
+//	fmt.Print(int64(kilobit/linkio.BitPerSecond)) // prints 1024
+//
+// To convert an integer number of units to a Throughput, multiply:
+//	megabits := 10
+//	fmt.Print(linkio.Throughput(megabits)*time.BitPerSecond) // prints 10s
+//
+const (
+	BitPerSecond      Throughput = 1
+	BytePerSecond                = 8 * BitPerSecond
+	KilobitPerSecond             = 1024 * BitPerSecond
+	KilobytePerSecond            = 1024 * BytePerSecond
+	MegabitPerSecond             = 1024 * KilobitPerSecond
+	MegabytePerSecond            = 1024 * KilobytePerSecond
+	GigabitPerSecond             = 1024 * MegabitPerSecond
+	GigabytePerSecond            = 1024 * MegabytePerSecond
 )
 
 // A LinkReader wraps an io.Reader, simulating reading from a
@@ -43,10 +69,10 @@ func (link *Link) NewLinkReader(r io.Reader) (s *LinkReader) {
 }
 
 // NewLink returns a new Link running at kbps.
-func NewLink(kbps int) (l *Link) {
+func NewLink(throughput Throughput) (l *Link) {
 	// allow up to 100 outstanding requests
 	l = &Link{in: make(chan linkRequest, 100)}
-	_ = l.SetSpeed(kbps)
+	l.SetThroughput(throughput)
 
 	// This goroutine serializes the requests. He could calculate
 	// link utilization by comparing the time he sleeps waiting for
@@ -65,13 +91,10 @@ func NewLink(kbps int) (l *Link) {
 	return
 }
 
-// SetSpeed set current speed of the bytes returned, returning the old speed.
-// The speed is expressed in kilobits per second, where kilo = 1024.
-func (l *Link) SetSpeed(kbps int) int {
-	old := 1e9 * l.speed / 1024
+// SetThroughput sets the current link throughput
+func (l *Link) SetThroughput(throughput Throughput) {
 	// l.speed is stored in ns/bit
-	l.speed = 1e9 / int64(kbps*1024)
-	return int(old)
+	l.speed = 1e9 / int64(throughput)
 }
 
 // why isn't this in package math? hmm.
