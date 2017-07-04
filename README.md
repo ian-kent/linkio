@@ -27,15 +27,17 @@ status, err := bufio.NewReader(linkReader).ReadString('\n')
 
 ```
 
-### LICENSE
+### History and license
 
-This code is originally a fork of [code.google.com/p/jra-go/linkio](https://code.google.com/p/jra-go/source/browse/#hg%2Flinkio).
+This repository is a fork of [Jeff R. Allen's
+linkio](https://github.com/jeffallen/jra-go/tree/master/linkio). linkio
+was brought into the world to help make a proxy to simulate slow
+Internet links (see [this blog
+posting](https://blog.nella.org/a-rate-limiting-http-proxy-in-go/)).
 
-The source contained this license text:
+Jeff's linkio was licensed via the [BSD 3-clause
+license](http://opensource.org/licenses/BSD-3-Clause).
 
-    Use of this source code is governed by a BSD-style
-    license that can be found in the LICENSE file.
-
-There is no LICENSE file, but it [may be referring to this](http://opensource.org/licenses/BSD-3-Clause).
-
-Any modifications since the initial commit are Copyright ©‎ 2014, Ian Kent (http://iankent.uk), and are released under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+Any modifications since the initial commit are Copyright ©‎ 2014, Ian
+Kent (http://iankent.uk), and are released under the terms of the [MIT
+License](http://opensource.org/licenses/MIT).
